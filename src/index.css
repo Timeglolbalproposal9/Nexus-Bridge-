@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Sora', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-arabic: 'Noto Sans Arabic', 'Inter', sans-serif;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #FBF7F2;
+    color: #1F1B3A;
+  }
+
+  [dir="rtl"] {
+    font-family: var(--font-arabic);
+  }
+
+  h1, h2, h3, h4, .font-heading {
+    font-family: var(--font-heading);
+  }
+}
+
+/* Custom soft shadows and scrollbar */
+.shadow-warm {
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08);
+}
+
+.shadow-card {
+  box-shadow: 0 4px 16px rgba(31, 27, 58, 0.05);
+}
+
+.shadow-float {
+  box-shadow: 0 12px 32px rgba(79, 70, 229, 0.12);
+}
+
+/* Hide scrollbars for clean mobile appearance */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Nexia Bridge - Child Skill & Therapy Platform",
+  "description": "Integrated child skill assessment, therapy, education and progress platform for clinics, schools, therapists and parents.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

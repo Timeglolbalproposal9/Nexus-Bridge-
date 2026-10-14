@@ -7,14 +7,18 @@ import {
   Target, 
   AuditEvent, 
   MessageItem, 
-  ObservationRecord 
+  ObservationRecord,
+  ChatContact,
+  AppNotification
 } from '../types';
 import { 
   INITIAL_CHILDREN, 
   INITIAL_CONSENT_GRANTS, 
   INITIAL_TARGETS, 
   INITIAL_AUDIT_LOG, 
-  INITIAL_MESSAGES 
+  INITIAL_MESSAGES,
+  INITIAL_CONTACTS,
+  INITIAL_NOTIFICATIONS
 } from '../data/seedData';
 
 interface AppContextType {
@@ -50,13 +54,31 @@ interface AppContextType {
   triggerConfetti: () => void;
   notification: string | null;
   showNotification: (msg: string) => void;
+
+  // Contacts / Multi-Contact Chat Support (Screenshot 3)
+  contacts: ChatContact[];
+  activeContactId: string | null;
+  setActiveContactId: (id: string | null) => void;
+  sendContactMessage: (contactId: string, text: string, goalTag?: string) => void;
+
+  // Global Notifications (Bell icon)
+  notifications: AppNotification[];
+  unreadNotificationsCount: number;
+  markNotificationAsRead: (id: string) => void;
+  markAllNotificationsAsRead: () => void;
+  isNotificationsOpen: boolean;
+  setIsNotificationsOpen: (open: boolean) => void;
+
+  // Global Settings (Gear icon)
+  isSettingsOpen: boolean;
+  setIsSettingsOpen: (open: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [role, setRoleState] = useState<RoleType | null>('parent');
-  const [selectedChildId, setSelectedChildId] = useState<string>('child-1');
+  const [selectedChildId, setSelectedChildId] = useState<string>('child-lama');
   const [activeTab, setActiveTabState] = useState<string>('Home');
   const [language, setLanguage] = useState<'en' | 'ar'>('en');
   const [darkMode, setDarkMode] = useState<boolean>(false);
@@ -65,22 +87,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [childScheduleMode, setChildScheduleMode] = useState<boolean>(false);
   const [notification, setNotification] = useState<string | null>(null);
 
+  // Modals for Header icons
+  const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
+
   const [childrenList, setChildrenList] = useState<Child[]>(INITIAL_CHILDREN);
   const [targets, setTargets] = useState<Target[]>(INITIAL_TARGETS);
   const [consentGrants, setConsentGrants] = useState<ConsentGrant[]>(INITIAL_CONSENT_GRANTS);
   const [auditLog, setAuditLog] = useState<AuditEvent[]>(INITIAL_AUDIT_LOG);
   const [messages, setMessages] = useState<MessageItem[]>(INITIAL_MESSAGES);
+  
+  // Contacts list matching Screenshot 3
+  const [contacts, setContacts] = useState<ChatContact[]>(INITIAL_CONTACTS);
+  const [activeContactId, setActiveContactId] = useState<string | null>(null);
+
+  // Notifications matching Screenshot 1 bell
+  const [notifications, setNotifications] = useState<AppNotification[]>(INITIAL_NOTIFICATIONS);
+
   const [observations, setObservations] = useState<ObservationRecord[]>([
     {
       id: 'obs-1',
-      studentId: 'child-1',
-      studentName: 'Leo Miller',
+      studentId: 'child-lama',
+      studentName: 'Lama Alharbi',
       goal: 'Answers questions in class',
       activity: 'Science: parts of a plant',
       result: 'Completed independently',
-      observation: 'Answered 4 of 5 questions on their own during flower dissection.',
+      observation: 'Answered peer question regarding plant leaves spontaneously.',
       timestamp: 'Today at 10:15 AM',
-      teacherName: 'Emma Watson'
+      teacherName: 'Ms. Layla Fahad'
     }
   ]);
 
@@ -94,8 +128,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
+      document.body.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
+      document.body.classList.remove('dark');
     }
   }, [darkMode]);
 
@@ -127,6 +163,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const setActiveTab = (tab: string) => {
     setActiveTabState(tab);
+    // If user switches to Messages tab, reset active contact so the contacts list is shown first!
+    if (tab.toLowerCase() === 'messages') {
+      setActiveContactId(null);
+    }
   };
 
   const toggleLanguage = () => {
@@ -190,7 +230,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       id: `audit-${Date.now()}`,
       timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
       userId: 'user-parent',
-      userName: 'Sarah Miller',
+      userName: 'Sarah Alharbi',
       role: 'parent',
       action: allowed ? 'GRANT_ACCESS_DOMAIN' : 'REVOKE_ACCESS_DOMAIN',
       resource: `${targetGrant?.professionalName || 'Professional'} · Domain: ${domain}`
@@ -234,7 +274,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       id: `audit-${Date.now()}`,
       timestamp: new Date().toISOString().replace('T', ' ').substring(0, 19),
       userId: `user-${role}`,
-      userName: role === 'behavior' ? 'Dr. Maya Lin' : role === 'speech' ? 'Elena Vance' : 'Marcus Reed',
+      userName: role === 'behavior' ? 'Dr. Tareq Hassan' : role === 'speech' ? 'Dr. Sarah Alharbi' : 'Reem Al-Ahmad',
       role: role || 'behavior',
       action: 'RECORD_TRIAL_DATA',
       resource: `${activeChild.name} · ${summaryText}`
@@ -250,7 +290,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setObservations(prev => [newObs, ...prev]);
 
-    // Also update child's today progress item if matching
     setChildrenList(prev => prev.map(c => {
       if (c.id === obs.studentId) {
         return {
@@ -290,7 +329,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const newMsg: MessageItem = {
       id: `msg-${Date.now()}`,
       childId: selectedChildId,
-      senderName: role === 'parent' ? 'Sarah Miller' : role === 'teacher' ? 'Emma Watson' : 'Care Team Member',
+      senderName: role === 'parent' ? 'Sarah Alharbi' : role === 'teacher' ? 'Ms. Layla Fahad' : 'Care Team Member',
       senderRole: role || 'parent',
       senderAvatar: activeChild.avatar,
       contentEn: text,
@@ -302,6 +341,46 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setMessages(prev => [...prev, newMsg]);
     showNotification('Message sent to child care team.');
   };
+
+  const sendContactMessage = (contactId: string, text: string, goalTag?: string) => {
+    const newMsg: MessageItem = {
+      id: `msg-${Date.now()}`,
+      childId: selectedChildId,
+      senderName: role === 'parent' ? 'Sarah Alharbi' : 'Care Team Member',
+      senderRole: role || 'parent',
+      senderAvatar: activeChild.avatar,
+      contentEn: text,
+      contentAr: text,
+      timestamp: 'Just now',
+      goalTag: goalTag || 'General Progress',
+      isParent: true,
+    };
+
+    setContacts(prev => prev.map(c => {
+      if (c.id === contactId) {
+        return {
+          ...c,
+          lastMessage: text,
+          timestamp: 'Just now',
+          messages: [...c.messages, newMsg]
+        };
+      }
+      return c;
+    }));
+
+    showNotification('Message sent to specialist.');
+  };
+
+  const markNotificationAsRead = (id: string) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
+  };
+
+  const markAllNotificationsAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    showNotification('All notifications marked as read.');
+  };
+
+  const unreadNotificationsCount = notifications.filter(n => !n.read).length;
 
   return (
     <AppContext.Provider
@@ -338,6 +417,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         triggerConfetti,
         notification,
         showNotification,
+
+        contacts,
+        activeContactId,
+        setActiveContactId,
+        sendContactMessage,
+
+        notifications,
+        unreadNotificationsCount,
+        markNotificationAsRead,
+        markAllNotificationsAsRead,
+        isNotificationsOpen,
+        setIsNotificationsOpen,
+
+        isSettingsOpen,
+        setIsSettingsOpen,
       }}
     >
       {children}

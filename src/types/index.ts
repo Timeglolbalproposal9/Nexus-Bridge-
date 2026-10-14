@@ -67,7 +67,7 @@ export interface ConsentGrant {
 export interface Target {
   id: string;
   childId: string;
-  discipline: 'behavior' | 'speech' | 'ot' | 'remedial';
+  discipline: 'behavior' | 'speech' | 'ot' | 'remedial' | 'teacher';
   name: string;
   domain: string;
   operationalDefinition: string;
@@ -81,6 +81,18 @@ export interface Target {
   suggestedNextStep: string; // e.g., "Review related prerequisite skill"
   approvalStatus: 'approved' | 'awaiting_approval' | 'needs_review';
   lastThreeSessions: number[]; // e.g. [80, 85, 85]
+  origin?: string; // Where target came from (e.g. "Aug 2026 IEP Clinical Baseline Assessment")
+  therapistName?: string; // Assigned lead specialist
+  baseline?: number; // Initial assessment score before therapy (e.g. 20%)
+  contributingSessions?: {
+    id: string;
+    date: string;
+    therapistName: string;
+    scorePercent: number;
+    notes: string;
+    trialsRecorded?: string;
+    source: 'Clinic Session' | 'Home Practice' | 'Classroom Observation' | 'Telehealth';
+  }[];
 }
 
 export interface TrialData {
@@ -143,4 +155,29 @@ export interface MessageItem {
   timestamp: string;
   goalTag?: string;
   isParent: boolean;
+}
+
+export interface ChatContact {
+  id: string;
+  name: string;
+  roleTitle: string;
+  avatarInitial: string;
+  avatarBg: string;
+  avatarTextColor: string;
+  online: boolean;
+  timestamp: string;
+  lastMessage: string;
+  unreadCount?: number;
+  category: 'therapists' | 'school' | 'circle';
+  messages: MessageItem[];
+}
+
+export interface AppNotification {
+  id: string;
+  title: string;
+  description: string;
+  timestamp: string;
+  type: 'goal' | 'message' | 'session' | 'consent' | 'system';
+  read: boolean;
+  badge?: string;
 }

@@ -18,6 +18,8 @@ import { SupervisorPortal } from './components/supervisor/SupervisorPortal';
 import { AdminPortal } from './components/admin/AdminPortal';
 import { ChildScheduleMode } from './components/child/ChildScheduleMode';
 import { PromptAuditModal } from './components/common/PromptAuditModal';
+import { NotificationsModal } from './components/common/NotificationsModal';
+import { SettingsModal } from './components/common/SettingsModal';
 import { FileCheck, Sparkles, AlertCircle } from 'lucide-react';
 
 const MainContent: React.FC = () => {
@@ -74,6 +76,12 @@ const MainContent: React.FC = () => {
         isOpen={showAuditModal}
         onClose={() => setShowAuditModal(false)}
       />
+
+      {/* Global Notifications Modal (Bell icon across all portals) */}
+      <NotificationsModal />
+
+      {/* Global Settings Modal (Gear icon across all portals) */}
+      <SettingsModal />
     </div>
   );
 };

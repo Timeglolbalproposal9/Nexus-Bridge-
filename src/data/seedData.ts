@@ -1,46 +1,42 @@
-import { Child, ConsentGrant, Target, AuditEvent, MessageItem } from '../types';
+import { Child, ConsentGrant, Target, AuditEvent, MessageItem, ChatContact, AppNotification } from '../types';
 
 export const INITIAL_CHILDREN: Child[] = [
   {
-    id: 'child-1',
-    name: 'Leo Miller',
+    id: 'child-lama',
+    name: 'Lama Alharbi',
     age: 6,
-    avatar: 'https://images.unsplash.com/photo-1543332164-6e82f355badc?w=150&auto=format&fit=crop&q=80',
-    diagnosis: 'Autism Spectrum Disorder (Level 1), Speech Delay',
-    caregivers: ['Sarah Miller (Mother)', 'David Miller (Father)'],
-    school: 'Oakridge Elementary School',
-    classroom: 'Grade 1 - Room 104',
+    avatar: 'https://images.unsplash.com/photo-1595454223600-91fb57d22457?w=150&auto=format&fit=crop&q=80',
+    diagnosis: 'Language Delay & Sensory-Motor Integration',
+    caregivers: ['Sarah Alharbi (Mother)', 'Khaled Alharbi (Father)'],
+    school: 'Riyadh Inclusive Academy',
+    classroom: 'Grade 1 - Lavender Room',
     assignedTeam: [
-      { role: 'behavior', name: 'Dr. Maya Lin', title: 'Lead BCBA' },
-      { role: 'speech', name: 'Elena Vance', title: 'Speech-Language Pathologist' },
-      { role: 'ot', name: 'Marcus Reed', title: 'Occupational Therapist' },
-      { role: 'teacher', name: 'Emma Watson', title: 'Primary Classroom Teacher' },
-      { role: 'remedial', name: 'James Chen', title: 'Remedial Learning Specialist' },
+      { role: 'speech', name: 'Dr. Sarah Alharbi', title: 'Speech-Language Pathologist (Lead SLP)' },
+      { role: 'ot', name: 'Reem Al-Ahmad', title: 'Occupational Therapist (OT Specialist)' },
+      { role: 'behavior', name: 'Dr. Tareq Hassan', title: 'Board Certified Behavior Analyst (BCBA)' },
+      { role: 'teacher', name: 'Ms. Layla Fahad', title: 'Inclusive Classroom Teacher' },
       { role: 'supervisor', name: 'Dr. Rebecca Hall', title: 'Clinical Director' },
-      { role: 'admin', name: 'David Kim', title: 'Clinic Operations Manager' },
     ],
     todayProgress: [
-      { area: 'Communication', status: 'Improving', reason: 'Responded to 5 of 6 WH questions during speech session with verbal prompt fading.', score: 85, criterion: 90 },
-      { area: 'Math', status: 'Improving', reason: 'Successfully sorted 10 colored blocks with independent counting.', score: 80, criterion: 80 },
-      { area: 'Fine motor', status: 'Developing', reason: 'Fastened 3 large buttons; required partial physical help on the final top button.', score: 65, criterion: 85 },
-      { area: 'Independent dressing', status: 'Developing', reason: 'Put on sneakers independently; velcro fastened with verbal cue.', score: 60, criterion: 90 },
-      { area: 'Attention', status: 'Improving', reason: 'Sustained focus for 12 minutes in morning circle activity without leaving seat.', score: 75, criterion: 70 },
+      { area: 'Fine motor', status: 'Developing', reason: 'Fastening buttons and tripod pencil hold practice with adaptive grip.', score: 65, criterion: 80 },
+      { area: 'Independent dressing', status: 'Developing', reason: 'Putting on sneakers and zipping sweater slider.', score: 60, criterion: 85 },
+      { area: 'Attention', status: 'Improving', reason: 'Sustained focus in morning circle for 14 minutes.', score: 85, criterion: 75 },
     ],
     thisWeek: {
-      whatWeWorkedOn: 'Answering WH questions in speech therapy and in class, pencil grasp stabilization, and independent classroom transition.',
-      whatChildIsDoingWell: 'Answered 4 of 5 questions on their own during science class and identified parts of a flower.',
-      whatNeedsMorePractice: 'Starting dressing steps without a reminder and buttoning smaller garments.',
+      whatWeWorkedOn: 'Answering WH questions in speech therapy, sensory regulation circuit, and independent dressing routines.',
+      whatChildIsDoingWell: 'Met mastery criterion for requesting help across 3 sessions.',
+      whatNeedsMorePractice: 'Fastening buttons and tripod pencil hold without adult cue.',
       howToPracticeAtHome: {
         title: 'Snack-Time WH Question Game',
-        description: 'At snack time, ask a "what" or "where" question and wait a full 4 seconds before offering a gentle hint.',
-        materials: ['Favorite healthy snack (e.g. apple slices or crackers)', 'Visual choice board (optional)'],
+        description: 'At snack time, ask a "what" or "where" question and wait 4 seconds before helping.',
+        materials: ['Favorite healthy snack', 'Visual choice board'],
         videoDuration: '1:02',
         steps: [
-          'Place snack within sight but just out of direct reach.',
-          'Ask: "Where is the apple?" or "What do you want to eat?"',
-          'Count quietly to 4 in your head to allow processing time.',
-          'If no response, point to the item (gesture prompt) rather than answering for them.',
-          'Celebrate immediately with positive praise and hand them the snack!'
+          'Place snack in sight but just out of reach.',
+          'Ask: "Where is the apple?" or "What do you want?"',
+          'Wait 4 seconds for processing.',
+          'If needed, gently point to the item.',
+          'Praise immediately and give the snack!'
         ]
       }
     }
@@ -220,6 +216,162 @@ export const INITIAL_CONSENT_GRANTS: ConsentGrant[] = [
 ];
 
 export const INITIAL_TARGETS: Target[] = [
+  {
+    id: 'target-lama-1',
+    childId: 'child-lama',
+    discipline: 'speech',
+    name: 'Answering WH Questions (Where & What)',
+    domain: 'Communication & Speech',
+    origin: 'Comprehensive Pediatric Speech Evaluation (Aug 2026)',
+    therapistName: 'Dr. Sarah Alharbi (Lead SLP)',
+    baseline: 25,
+    operationalDefinition: 'When shown an everyday scenario scene and asked "Where is [item]?" or "What is [person] doing?", Lama will answer with a target vocabulary word or 2-word phrase within 4 seconds without physical or model prompting.',
+    materials: ['Everyday scenario flashcards (kitchen, park, classroom)', 'Visual choice board', 'Healthy snack rewards'],
+    procedureSteps: [
+      '1. Present visual scenario card in front of Lama.',
+      '2. Deliver vocal discriminative stimulus: "Where is the apple?".',
+      '3. Wait 4 seconds for processing.',
+      '4. If no vocalization, deliver gesture prompt pointing to location.',
+      '5. Immediate verbal praise and token.'
+    ],
+    masteryCriterion: '90% across 3 consecutive sessions',
+    criterionThreshold: 90,
+    currentPerformance: 85,
+    status: 'teaching',
+    suggestedAction: 'Fading verbal prompts to pure independent vocalizations',
+    suggestedNextStep: 'Generalize to peer conversations in lunchroom',
+    approvalStatus: 'approved',
+    lastThreeSessions: [80, 85, 85],
+    contributingSessions: [
+      { id: 's-1', date: 'Oct 10, 2026', therapistName: 'Dr. Sarah Alharbi', scorePercent: 85, notes: 'Answered 5 of 6 WH questions accurately without verbal cue.', trialsRecorded: '10 trials (8 independent, 1 verbal, 1 model)', source: 'Clinic Session' },
+      { id: 's-2', date: 'Oct 8, 2026', therapistName: 'Sarah Alharbi (Mother)', scorePercent: 80, notes: 'Practiced snack-time routine. Lama answered "Where apple" on first try!', trialsRecorded: '5 trials (4 independent, 1 prompt)', source: 'Home Practice' },
+      { id: 's-3', date: 'Oct 6, 2026', therapistName: 'Dr. Sarah Alharbi', scorePercent: 80, notes: 'Targeted "Where" with classroom photo scenes.', trialsRecorded: '10 trials (8 independent, 2 verbal)', source: 'Clinic Session' }
+    ]
+  },
+  {
+    id: 'target-lama-2',
+    childId: 'child-lama',
+    discipline: 'ot',
+    name: 'Fastening Vest Buttons & Tripod Grip',
+    domain: 'Motor Skills & Daily Self-Care',
+    origin: 'OT Fine Motor & Functional ADL Assessment (Sep 2026)',
+    therapistName: 'Reem Al-Ahmad (OT Specialist)',
+    baseline: 20,
+    operationalDefinition: 'Lama will independently grasp, push, and pull 5 1-inch wooden buttons through elastic slots on a dressing vest, and maintain a functional tripod pencil grasp for 5 minutes.',
+    materials: ['Adaptive button vest with 1-inch wooden buttons', 'Silicone molded pencil grip', 'Mirror'],
+    procedureSteps: [
+      '1. Stabilize vest hem with helper hand.',
+      '2. Pinch button edge with dominant pincer grasp.',
+      '3. Push button through slit until halfway visible.',
+      '4. Switch hands to pull button completely through.'
+    ],
+    masteryCriterion: '85% independent steps across 3 sessions',
+    criterionThreshold: 85,
+    currentPerformance: 70,
+    status: 'teaching',
+    suggestedAction: 'Backward chaining on final button pull-through',
+    suggestedNextStep: 'Transition to real school uniform cardigan buttons',
+    approvalStatus: 'approved',
+    lastThreeSessions: [60, 65, 70],
+    contributingSessions: [
+      { id: 's-4', date: 'Oct 8, 2026', therapistName: 'Reem Al-Ahmad', scorePercent: 70, notes: 'Buttoned 4 of 5 buttons with minimal guidance on step 3.', trialsRecorded: '5 button cycles (70% accuracy)', source: 'Clinic Session' },
+      { id: 's-5', date: 'Oct 5, 2026', therapistName: 'Sarah Alharbi (Mother)', scorePercent: 65, notes: 'Dressing practice before school. Needed verbal prompt on button #3.', trialsRecorded: 'Morning dressing run', source: 'Home Practice' },
+      { id: 's-6', date: 'Oct 3, 2026', therapistName: 'Reem Al-Ahmad', scorePercent: 60, notes: 'Introduced 1-inch buttons after hand warm-up therapy putty.', trialsRecorded: '5 button cycles', source: 'Clinic Session' }
+    ]
+  },
+  {
+    id: 'target-lama-3',
+    childId: 'child-lama',
+    discipline: 'behavior',
+    name: 'Requesting Help During Frustration',
+    domain: 'Functional Behavior & Communication',
+    origin: 'Functional Behavior Assessment (FBA) by Dr. Tareq Hassan',
+    therapistName: 'Dr. Tareq Hassan (BCBA)',
+    baseline: 15,
+    operationalDefinition: 'When experiencing a difficult task or delay in reinforcement, Lama will vocalize "Help please" or hand the help card within 3 seconds instead of crying or dropping to floor.',
+    materials: ['Visual "Help" icon card', 'Challenging puzzle tasks', 'Differential reinforcement token board'],
+    procedureSteps: [
+      '1. Present a sealed container or high-difficulty puzzle.',
+      '2. Observe latency to frustration cues.',
+      '3. Immediate prompt before problem behavior occurs: model "Help please".',
+      '4. Reinforce within 1 second of help request with adult assistance.'
+    ],
+    masteryCriterion: '90% across 3 consecutive sessions',
+    criterionThreshold: 90,
+    currentPerformance: 92,
+    status: 'mastered',
+    suggestedAction: 'Goal ready for supervisor mastery review & generalization',
+    suggestedNextStep: 'Generalize to noisy cafeteria and playground transitions',
+    approvalStatus: 'awaiting_approval',
+    lastThreeSessions: [90, 92, 92],
+    contributingSessions: [
+      { id: 's-7', date: 'Oct 12, 2026', therapistName: 'Dr. Tareq Hassan', scorePercent: 92, notes: 'Lama met mastery threshold! Latency dropped to 2.8s across 10 trials.', trialsRecorded: '10 trials (9 independent, 1 prompt)', source: 'Clinic Session' },
+      { id: 's-8', date: 'Oct 9, 2026', therapistName: 'Ms. Layla Fahad', scorePercent: 92, notes: 'Used Help card spontaneously during difficult art scissors activity!', trialsRecorded: 'Classroom observation', source: 'Classroom Observation' },
+      { id: 's-9', date: 'Oct 7, 2026', therapistName: 'Dr. Tareq Hassan', scorePercent: 90, notes: 'Zero vocal protest observed across 8 problem-solving trials.', trialsRecorded: '8 trials (7 independent, 1 verbal)', source: 'Clinic Session' }
+    ]
+  },
+  {
+    id: 'target-lama-4',
+    childId: 'child-lama',
+    discipline: 'remedial',
+    name: 'Counting Objects 1-10 with Token Counters',
+    domain: 'Functional Learning & Thinking',
+    origin: 'Early Numeracy Screening & Classroom Plan',
+    therapistName: 'Ms. Layla Fahad (Special Educator)',
+    baseline: 30,
+    operationalDefinition: 'Given an array of 1 to 10 manipulatives (counting bears/tokens), Lama will touch each item one-by-one with 1-to-1 correspondence and state the final cardinal number.',
+    materials: ['Rainbow counting bears', '10-frame visual number mat', 'Number digit cards'],
+    procedureSteps: [
+      '1. Place 1-10 counting bears in front of student.',
+      '2. Instruction: "Count the bears and tell me how many."',
+      '3. Lama touches each bear in linear sequence from left to right.',
+      '4. Reinforce cardinal answer.'
+    ],
+    masteryCriterion: '80% across 3 sessions',
+    criterionThreshold: 80,
+    currentPerformance: 65,
+    status: 'teaching',
+    suggestedAction: 'Use linear 10-frame track to prevent skipping items',
+    suggestedNextStep: 'Match counted quantities to written numeral digits',
+    approvalStatus: 'approved',
+    lastThreeSessions: [55, 60, 65],
+    contributingSessions: [
+      { id: 's-10', date: 'Oct 11, 2026', therapistName: 'Ms. Layla Fahad', scorePercent: 65, notes: 'Accurate up to 6 items. Rushed through numbers 7 to 10.', trialsRecorded: '6 counting sets', source: 'Classroom Observation' },
+      { id: 's-11', date: 'Oct 9, 2026', therapistName: 'Sarah Alharbi (Mother)', scorePercent: 60, notes: 'Counted apple slices at kitchen table with 10-frame paper.', trialsRecorded: 'Home dinner routine', source: 'Home Practice' },
+      { id: 's-12', date: 'Oct 6, 2026', therapistName: 'Ms. Layla Fahad', scorePercent: 55, notes: 'Demonstrated good 1-to-1 touch up to 5 items.', trialsRecorded: '5 sets', source: 'Classroom Observation' }
+    ]
+  },
+  {
+    id: 'target-lama-5',
+    childId: 'child-lama',
+    discipline: 'teacher',
+    name: 'Answering Peer Questions in Circle Time',
+    domain: 'Social Connection & Play',
+    origin: 'Inclusive Classroom Social Participation Goals',
+    therapistName: 'Ms. Layla Fahad',
+    baseline: 20,
+    operationalDefinition: 'During morning circle or science time, Lama will answer peer greeting or question within 5 seconds using spoken words or visual communication card.',
+    materials: ['Social circle question dice', 'Peer buddy pairing', 'Visual timer'],
+    procedureSteps: [
+      '1. Peer asks Lama structured question (e.g. "What is your favorite color?").',
+      '2. Wait 5 seconds.',
+      '3. Facilitate peer eye contact and verbal or card response.',
+      '4. Shared high-five and group cheer!'
+    ],
+    masteryCriterion: '80% across 3 sessions',
+    criterionThreshold: 80,
+    currentPerformance: 80,
+    status: 'mastered',
+    suggestedAction: 'Target Mastered! Maintaining in natural group routines.',
+    suggestedNextStep: 'Initiate greeting to unfamiliar peers in playground',
+    approvalStatus: 'approved',
+    lastThreeSessions: [75, 80, 80],
+    contributingSessions: [
+      { id: 's-13', date: 'Oct 13, 2026', therapistName: 'Ms. Layla Fahad', scorePercent: 80, notes: 'Spontaneously responded to classmate during science parts of a plant!', trialsRecorded: 'Circle time observation', source: 'Classroom Observation' },
+      { id: 's-14', date: 'Oct 10, 2026', therapistName: 'Ms. Layla Fahad', scorePercent: 80, notes: 'Answered peer question about favorite animal with smile.', trialsRecorded: 'Morning circle', source: 'Classroom Observation' },
+      { id: 's-15', date: 'Oct 7, 2026', therapistName: 'Ms. Layla Fahad', scorePercent: 75, notes: 'Peer buddy helped with visual gesture prompt.', trialsRecorded: 'Morning circle', source: 'Classroom Observation' }
+    ]
+  },
   {
     id: 'target-1',
     childId: 'child-1',
@@ -401,5 +553,215 @@ export const INITIAL_MESSAGES: MessageItem[] = [
     timestamp: 'Today at 4:02 PM',
     goalTag: 'Answering WH Questions',
     isParent: false,
+  }
+];
+
+export const INITIAL_CONTACTS: ChatContact[] = [
+  {
+    id: 'contact-slp',
+    name: 'Dr. Sarah Alharbi (Lead SLP)',
+    roleTitle: 'Speech-Language Pathologist',
+    avatarInitial: 'س',
+    avatarBg: 'bg-[#EDE9FE] dark:bg-purple-950/60',
+    avatarTextColor: 'text-[#7C3AED] dark:text-purple-300',
+    online: true,
+    timestamp: '10:50 AM',
+    lastMessage: 'Wonderful! Remember to celebrate when she complete...',
+    unreadCount: 0,
+    category: 'therapists',
+    messages: [
+      {
+        id: 'm1',
+        childId: 'child-lama',
+        senderName: 'Dr. Sarah Alharbi (Lead SLP)',
+        senderRole: 'speech',
+        senderAvatar: '',
+        contentEn: 'Wonderful! Remember to celebrate when she completes the full phrase "I want apple please" without prompting.',
+        contentAr: 'رائع جداً! تذكري أن تحتفلي فوراً عندما تكمل الجملة كاملة "أريد تفاحة من فضلك" بدون مساعدة.',
+        timestamp: '10:50 AM',
+        goalTag: 'Communication & Speech',
+        isParent: false,
+      },
+      {
+        id: 'm2',
+        childId: 'child-lama',
+        senderName: 'Sarah Alharbi',
+        senderRole: 'parent',
+        senderAvatar: '',
+        contentEn: 'Thank you Dr. Sarah! She did it twice at breakfast today with a huge smile!',
+        contentAr: 'شكراً د. سارة! فعلتها مرتين في وجبة الإفطار اليوم مع ابتسامة عريضة!',
+        timestamp: '10:52 AM',
+        goalTag: 'Communication & Speech',
+        isParent: true,
+      }
+    ]
+  },
+  {
+    id: 'contact-ot',
+    name: 'Reem Al-Ahmad (OT Specialist)',
+    roleTitle: 'Occupational Therapist',
+    avatarInitial: 'ر',
+    avatarBg: 'bg-[#D1FAE5] dark:bg-emerald-950/60',
+    avatarTextColor: 'text-[#10B981] dark:text-emerald-300',
+    online: true,
+    timestamp: 'Yesterday',
+    lastMessage: 'Please continue the sensory regulating deep-pre...',
+    unreadCount: 2,
+    category: 'therapists',
+    messages: [
+      {
+        id: 'm3',
+        childId: 'child-lama',
+        senderName: 'Reem Al-Ahmad (OT Specialist)',
+        senderRole: 'ot',
+        senderAvatar: '',
+        contentEn: 'Please continue the sensory regulating deep-pressure vest routine before handwriting tasks.',
+        contentAr: 'يرجى الاستمرار في روتين سترة الضغط العميق المنظمة للحواس قبل مهام الكتابة اليدوية.',
+        timestamp: 'Yesterday at 3:15 PM',
+        goalTag: 'Motor Skills & Daily Self-Care',
+        isParent: false,
+      },
+      {
+        id: 'm4',
+        childId: 'child-lama',
+        senderName: 'Reem Al-Ahmad (OT Specialist)',
+        senderRole: 'ot',
+        senderAvatar: '',
+        contentEn: 'We noticed a 40% reduction in finger fatigue with the silicone tripod pencil grip!',
+        contentAr: 'لاحظنا انخفاضاً بنسبة 40٪ في إجهاد الأصابع مع قبضة القلم السيليكونية ثلاثية الأبعاد!',
+        timestamp: 'Yesterday at 3:18 PM',
+        goalTag: 'Motor Skills & Daily Self-Care',
+        isParent: false,
+      }
+    ]
+  },
+  {
+    id: 'contact-bcba',
+    name: 'Dr. Tareq Hassan (BCBA)',
+    roleTitle: 'Board Certified Behavior Analyst',
+    avatarInitial: 'ط',
+    avatarBg: 'bg-[#E0E7FF] dark:bg-indigo-950/60',
+    avatarTextColor: 'text-[#4F46E5] dark:text-indigo-300',
+    online: false,
+    timestamp: 'Oct 12',
+    lastMessage: '✓✓ Thank you Dr. Tareq. The 2-minute visual countdo...',
+    unreadCount: 0,
+    category: 'therapists',
+    messages: [
+      {
+        id: 'm5',
+        childId: 'child-lama',
+        senderName: 'Dr. Tareq Hassan (BCBA)',
+        senderRole: 'behavior',
+        senderAvatar: '',
+        contentEn: 'Lama met the mastery criterion for requesting help across 3 consecutive sessions! I have submitted the goal for supervisor review.',
+        contentAr: 'حققت لمى معيار الإتقان لطلب المساعدة عبر 3 جلسات متتالية! لقد رفعت الهدف لمراجعة المشرف.',
+        timestamp: 'Oct 12 at 4:30 PM',
+        goalTag: 'Functional Learning & Thinking',
+        isParent: false,
+      },
+      {
+        id: 'm6',
+        childId: 'child-lama',
+        senderName: 'Sarah Alharbi',
+        senderRole: 'parent',
+        senderAvatar: '',
+        contentEn: '✓✓ Thank you Dr. Tareq. The 2-minute visual countdown timer at home worked wonders during evening transitions.',
+        contentAr: '✓✓ شكراً د. طارق. المؤقت البصري التنازلي لمدة دقيقتين في المنزل أحدث فرقاً رائعاً أثناء الانتقال المسائي.',
+        timestamp: 'Oct 12 at 5:10 PM',
+        goalTag: 'Functional Learning & Thinking',
+        isParent: true,
+      }
+    ]
+  },
+  {
+    id: 'contact-teacher',
+    name: 'Ms. Layla Fahad (Special Educator)',
+    roleTitle: 'Inclusive Classroom Teacher',
+    avatarInitial: 'ل',
+    avatarBg: 'bg-[#FEF3C7] dark:bg-amber-950/60',
+    avatarTextColor: 'text-[#F59E0B] dark:text-amber-300',
+    online: true,
+    timestamp: 'Oct 11',
+    lastMessage: 'Ahmed used his visual PECS card to request wat...',
+    unreadCount: 1,
+    category: 'school',
+    messages: [
+      {
+        id: 'm7',
+        childId: 'child-lama',
+        senderName: 'Ms. Layla Fahad (Special Educator)',
+        senderRole: 'teacher',
+        senderAvatar: '',
+        contentEn: 'Lama used her visual choice card to request water independently during science class today! Super proud of her.',
+        contentAr: 'استخدمت لمى بطاقة الاختيار البصرية لطلب الماء باستقلالية أثناء حصة العلوم اليوم! فخورون جداً بها.',
+        timestamp: 'Oct 11 at 1:20 PM',
+        goalTag: 'Social Connection & Play',
+        isParent: false,
+      }
+    ]
+  },
+  {
+    id: 'contact-circle',
+    name: 'Care Circle (Multidisciplinary Team)',
+    roleTitle: 'SLP + OT + BCBA + Teacher + Parent',
+    avatarInitial: '👥',
+    avatarBg: 'bg-[#E0F2FE] dark:bg-sky-950/60',
+    avatarTextColor: 'text-[#0EA5E9] dark:text-sky-300',
+    online: true,
+    timestamp: 'Oct 10',
+    lastMessage: 'Interdisciplinary weekly goal review: Ahmed is advanc...',
+    unreadCount: 0,
+    category: 'circle',
+    messages: [
+      {
+        id: 'm8',
+        childId: 'child-lama',
+        senderName: 'Dr. Sarah Alharbi (Lead SLP)',
+        senderRole: 'speech',
+        senderAvatar: '',
+        contentEn: 'Interdisciplinary weekly goal review: Lama is advancing across communication and motor targets simultaneously. Synchronized strategy active.',
+        contentAr: 'المراجعة الأسبوعية المشتركة للأهداف: تتقدم لمى في أهداف التواصل والمهارات الحركية معاً. الاستراتيجية الموحدة مفعلة.',
+        timestamp: 'Oct 10 at 9:00 AM',
+        goalTag: 'Interdisciplinary Review',
+        isParent: false,
+      }
+    ]
+  }
+];
+
+export const INITIAL_NOTIFICATIONS: AppNotification[] = [
+  {
+    id: 'n1',
+    title: 'Goal ready for review',
+    description: 'Lama Alharbi met the mastery criterion for requesting help across 3 sessions.',
+    timestamp: '2h ago',
+    type: 'goal',
+    read: false,
+    badge: 'Pending review'
+  },
+  {
+    id: 'n2',
+    title: 'New message from Reem Al-Ahmad (OT)',
+    description: 'Please continue the sensory regulating deep-pressure vest routine.',
+    timestamp: 'Yesterday',
+    type: 'message',
+    read: false
+  },
+  {
+    id: 'n3',
+    title: 'Weekly Progress Report Available',
+    description: 'Dr. Sarah Alharbi compiled this week’s multidisciplinary progress summary.',
+    timestamp: '2 days ago',
+    type: 'session',
+    read: true
+  },
+  {
+    id: 'n4',
+    title: 'Consent Access Verification',
+    description: 'Ms. Layla Fahad accessed educational milestones under Saudi PDPL consent grant.',
+    timestamp: '3 days ago',
+    type: 'consent',
+    read: true
   }
 ];

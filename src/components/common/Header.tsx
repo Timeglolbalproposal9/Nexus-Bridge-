@@ -10,9 +10,11 @@ import {
   WifiOff, 
   Sparkles, 
   UserCheck, 
-  ShieldCheck,
-  Check,
-  Smartphone
+  ShieldCheck, 
+  Check, 
+  Smartphone,
+  Bell,
+  Settings
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -31,7 +33,10 @@ export const Header: React.FC = () => {
     toggleOffline,
     syncQueueCount,
     childScheduleMode,
-    setChildScheduleMode
+    setChildScheduleMode,
+    setIsNotificationsOpen,
+    unreadNotificationsCount,
+    setIsSettingsOpen
   } = useApp();
 
   const [childDropdownOpen, setChildDropdownOpen] = useState(false);
@@ -162,54 +167,89 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Header bar matching Client PDF screens exactly */}
+      {/* Main Header bar matching Screenshot 1 exactly */}
       <div className="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Left: Role label with accent badge */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5">
-            <span className={`w-2.5 h-2.5 rounded-full ${currentRoleConfig.dot}`}></span>
-            <span className="text-sm font-semibold text-[#1F1B3A] dark:text-white">
-              {language === 'ar' ? currentRoleConfig.labelAr : currentRoleConfig.labelEn}
-            </span>
+        {/* Left: User Avatar S, Name, Role badge, and Child Switcher */}
+        <div className="flex items-center gap-3">
+          <div className="w-11 h-11 rounded-full bg-[#EDE9FE] dark:bg-purple-950/70 text-[#7C3AED] dark:text-purple-300 font-bold text-lg flex items-center justify-center shadow-xs shrink-0 border border-purple-200 dark:border-purple-800">
+            {role === 'parent' ? 'S' : role === 'speech' ? 'س' : role === 'ot' ? 'ر' : role === 'behavior' ? 'ط' : role === 'teacher' ? 'ل' : 'A'}
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-heading font-bold text-base text-[#1F1B3A] dark:text-white leading-tight">
+                {role === 'parent' ? 'Sarah Alharbi' : role === 'speech' ? 'Dr. Sarah Alharbi' : role === 'ot' ? 'Reem Al-Ahmad' : role === 'behavior' ? 'Dr. Tareq Hassan' : role === 'teacher' ? 'Ms. Layla Fahad' : 'Sarah Alharbi'}
+              </span>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#F4EEE6] dark:bg-[#252044] text-[#6B6785] dark:text-gray-300 border border-[#E8E2D9] dark:border-gray-700">
+                {role === 'parent' ? 'Mother' : role === 'speech' ? 'SLP' : role === 'ot' ? 'OT' : role === 'behavior' ? 'BCBA' : role === 'teacher' ? 'Teacher' : 'Lead'}
+              </span>
+            </div>
+
+            {/* Child Indicator with Green Dot & Dropdown */}
+            <div className="relative mt-0.5">
+              <button
+                onClick={() => setChildDropdownOpen(!childDropdownOpen)}
+                className="flex items-center gap-1.5 text-xs font-semibold text-[#10B981] dark:text-emerald-400 hover:text-emerald-600 transition"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#10B981]"></span>
+                <span>Child: {activeChild.name}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-[#10B981]" />
+              </button>
+
+              {childDropdownOpen && (
+                <div className="absolute left-0 rtl:left-auto rtl:right-0 mt-2 w-56 bg-white dark:bg-[#1F1B3A] border border-[#E8E2D9] dark:border-[#38325E] rounded-2xl shadow-warm py-2 z-50 animate-in fade-in">
+                  <div className="px-3 py-1 text-[11px] font-semibold text-[#6B6785] dark:text-[#A5A0C2]">
+                    Select Child Record
+                  </div>
+                  {childrenList.map((c) => (
+                    <button
+                      key={c.id}
+                      onClick={() => {
+                        setSelectedChildId(c.id);
+                        setChildDropdownOpen(false);
+                      }}
+                      className={`w-full text-left rtl:text-right px-3 py-2 text-xs flex items-center gap-2 hover:bg-[#F4EEE6] dark:hover:bg-[#2B264E] transition ${
+                        selectedChildId === c.id ? 'font-semibold text-[#4F46E5] dark:text-indigo-400 bg-indigo-50/60 dark:bg-indigo-950/40' : 'text-[#1F1B3A] dark:text-gray-200'
+                      }`}
+                    >
+                      <img src={c.avatar} alt={c.name} className="w-6 h-6 rounded-full object-cover" />
+                      <div className="truncate flex-1">
+                        <p className="leading-tight">{c.name}</p>
+                        <p className="text-[10px] text-[#6B6785] dark:text-gray-400 truncate">{c.diagnosis}</p>
+                      </div>
+                      {selectedChildId === c.id && <Check className="w-3.5 h-3.5 text-[#4F46E5]" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Right: [Child's name] ▾ dropdown */}
-        <div className="relative">
+        {/* Right: Working Bell and Settings Gear matching Screenshot 1 */}
+        <div className="flex items-center gap-2">
+          {/* Bell Icon */}
           <button
-            onClick={() => setChildDropdownOpen(!childDropdownOpen)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F4EEE6] dark:bg-[#241F45] text-xs font-semibold text-[#1F1B3A] dark:text-white hover:bg-[#E8E2D9] dark:hover:bg-[#2E2856] transition"
+            onClick={() => setIsNotificationsOpen(true)}
+            className="relative p-2 rounded-2xl bg-white dark:bg-[#201C3D] border border-[#E8E2D9] dark:border-[#38325E] text-[#1F1B3A] dark:text-white shadow-xs hover:border-[#4F46E5] transition"
+            title="Notifications"
           >
-            <span className="max-w-[120px] truncate">{activeChild.name}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-[#6B6785]" />
+            <Bell className="w-5 h-5 text-[#1F1B3A] dark:text-white" />
+            {unreadNotificationsCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#FF6B57] text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                {unreadNotificationsCount}
+              </span>
+            )}
           </button>
 
-          {childDropdownOpen && (
-            <div className="absolute right-0 rtl:right-auto rtl:left-0 mt-2 w-56 bg-white dark:bg-[#1F1B3A] border border-[#E8E2D9] dark:border-[#38325E] rounded-2xl shadow-warm py-2 z-50 animate-in fade-in">
-              <div className="px-3 py-1 text-[11px] font-semibold text-[#6B6785] dark:text-[#A5A0C2]">
-                Active Child Record
-              </div>
-              {childrenList.map((c) => (
-                <button
-                  key={c.id}
-                  onClick={() => {
-                    setSelectedChildId(c.id);
-                    setChildDropdownOpen(false);
-                  }}
-                  className={`w-full text-left rtl:text-right px-3 py-2 text-xs flex items-center gap-2 hover:bg-[#F4EEE6] dark:hover:bg-[#2B264E] transition ${
-                    selectedChildId === c.id ? 'font-semibold text-[#4F46E5] dark:text-indigo-400 bg-indigo-50/60 dark:bg-indigo-950/40' : 'text-[#1F1B3A] dark:text-gray-200'
-                  }`}
-                >
-                  <img src={c.avatar} alt={c.name} className="w-6 h-6 rounded-full object-cover" />
-                  <div className="truncate flex-1">
-                    <p className="leading-tight">{c.name}</p>
-                    <p className="text-[10px] text-[#6B6785] dark:text-gray-400 truncate">{c.diagnosis}</p>
-                  </div>
-                  {selectedChildId === c.id && <Check className="w-3.5 h-3.5 text-[#4F46E5]" />}
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Settings Gear Icon */}
+          <button
+            onClick={() => setIsSettingsOpen(true)}
+            className="p-2 rounded-2xl bg-white dark:bg-[#201C3D] border border-[#E8E2D9] dark:border-[#38325E] text-[#1F1B3A] dark:text-white shadow-xs hover:border-[#4F46E5] transition"
+            title="Settings & Privacy"
+          >
+            <Settings className="w-5 h-5 text-[#1F1B3A] dark:text-white" />
+          </button>
         </div>
       </div>
 

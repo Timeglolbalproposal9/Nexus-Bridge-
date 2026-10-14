@@ -33,9 +33,10 @@ export const BottomTabBar: React.FC = () => {
       case 'parent':
         return [
           { id: 'Home', labelEn: 'Home', labelAr: 'الرئيسية', icon: Home },
-          { id: 'Progress', labelEn: 'Progress', labelAr: 'التقدم', icon: TrendingUp },
+          { id: 'Progress', labelEn: 'Progress', labelAr: 'التقدم', icon: BarChart2 },
+          { id: 'Targets', labelEn: 'Targets', labelAr: 'الأهداف', icon: TargetIcon },
+          { id: 'Sessions', labelEn: 'Sessions', labelAr: 'الجلسات', icon: Calendar },
           { id: 'Messages', labelEn: 'Messages', labelAr: 'الرسائل', icon: MessageSquare },
-          { id: 'Team', labelEn: 'Team', labelAr: 'الفريق', icon: Users },
         ];
       case 'behavior':
         return [

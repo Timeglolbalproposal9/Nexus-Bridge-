@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --font-heading: 'Sora', sans-serif;
@@ -11,6 +13,12 @@
     font-family: var(--font-body);
     background-color: #FBF7F2;
     color: #1F1B3A;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .dark body, :root.dark body {
+    background-color: #14122B;
+    color: #FFFFFF;
   }
 
   [dir="rtl"] {
